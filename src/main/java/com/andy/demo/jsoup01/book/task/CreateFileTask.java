@@ -7,6 +7,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
@@ -38,7 +39,12 @@ public class CreateFileTask implements Runnable {
      */
     @Override
     public void run() {
-        log.info("下载章节数：{}", books.size());
+        log.info("当前线程：{}，下载章数：【{}~{}】，共{}章",
+                Thread.currentThread().getName(),
+                books.get(0).getIndex(),
+                books.get(books.size()-1).getIndex(),
+                books.size());
+
         books.forEach((Chapter chapter) -> {
             try {
                 iNet.getContext(chapter);
@@ -57,7 +63,7 @@ public class CreateFileTask implements Runnable {
      * @throws IOException
      */
     private final void write(Integer index, String context) throws IOException {
-        File directory = new File(INet.DOWNLOAD_ADDR + iNet.bookName());
+        File directory = new File(INet.DOWNLOAD_ADDRESS + iNet.bookName());
         // 强制创建文件夹
         FileUtils.forceMkdir(directory);
         File file = new File(directory, index(index) + ".txt");
@@ -67,19 +73,12 @@ public class CreateFileTask implements Runnable {
     }
 
     /**
-     *  小文件名称，便于合并大文件
+     *  以index作为小文件名称，便于合并大文件时排序
      * @param index
      * @return
      */
     private  final String index(Integer index){
-        if(index < 10){
-            return "000" + index;
-        } else if(index >= 10 && index < 100){
-            return "00" + index;
-        } else if(index >= 100 && index < 1000){
-            return  "0" + index;
-        } else {
-            return index+"";
-        }
+        DecimalFormat df = new DecimalFormat("0000");
+        return df.format(index);
     }
 }

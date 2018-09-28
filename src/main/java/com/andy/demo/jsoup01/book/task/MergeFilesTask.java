@@ -16,7 +16,8 @@ import java.util.concurrent.CountDownLatch;
  */
 @Slf4j
 public class MergeFilesTask implements Runnable{
-    private static final int BUFSIZE = 1024 * 100;
+    private static final int BUFFER_SIZE = 1024 * 100;
+
     private INet iNet;
     private CountDownLatch downLatch;
 
@@ -40,14 +41,14 @@ public class MergeFilesTask implements Runnable{
     public void run() {
         log.info("启用 合并文件 任务线程.");
         try {
-            // 等待 所有章节下载完毕
+            // 等待 所有下载任务线程 完毕
             this.downLatch.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         log.info("所有下载任务已结束，开始合并小说.");
-        String outFile = INet.DOWNLOAD_ADDR + iNet.bookName();
+        String outFile = INet.DOWNLOAD_ADDRESS + iNet.bookName();
         File[] files = new File(outFile).listFiles();
 
         mergeFiles(outFile + ".txt", files);
@@ -58,18 +59,18 @@ public class MergeFilesTask implements Runnable{
      * @param outFile 合并后输出的文件名
      * @param files 将合并的文件集合
      */
-    private final void mergeFiles(String outFile, File[] files) {
+    private void mergeFiles(String outFile, File[] files) {
         FileChannel outChannel = null;
-        FileInputStream fileInputStream = null;
+        FileInputStream fileInputStream;
 
-        FileChannel fc = null;
-        ByteBuffer bb = null;
+        FileChannel fc;
+        ByteBuffer bb;
         try {
             outChannel = new FileOutputStream(outFile).getChannel();
             for (File f : files) {
                 fileInputStream = new FileInputStream(f);
                 fc = fileInputStream.getChannel();
-                bb = ByteBuffer.allocate(BUFSIZE);
+                bb = ByteBuffer.allocate(BUFFER_SIZE);
                 while (fc.read(bb) != -1) {
                     bb.flip();
                     outChannel.write(bb);

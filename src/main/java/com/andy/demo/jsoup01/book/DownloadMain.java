@@ -36,13 +36,14 @@ public class DownloadMain {
 
             ExecutorService executorService = Executors.newCachedThreadPool();
 
+            // 启用下载线程的个数
             int c = books.size() % INet.CHAPTER_NUMBER == 0 ? books.size()
                     / INet.CHAPTER_NUMBER : books.size() / INet.CHAPTER_NUMBER
                     + 1;
             log.info("启用【{}】个 下载线程", c);
 
             CountDownLatch downLatch = new CountDownLatch(c);
-            CreateFileTask createFile = null;
+            CreateFileTask createFile;
             for (int i = 0; i < c; i++) {
                 if (i != c - 1) {
                     createFile = new CreateFileTask(iNet, books.subList(i

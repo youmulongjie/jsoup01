@@ -58,7 +58,7 @@ public class Boquge implements INet {
             Elements aElements = liElements.get(i).getElementsByTag("a");
             Validate.notNull(aElements, "没有找到 a标签的元素.");
 
-            Element aElement = null;
+            Element aElement;
             if (null != aElements && aElements.size() > 0) {
                 aElement = aElements.get(0);
 
