@@ -13,7 +13,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class Jsoup01ApplicationTests {
-
     private String bookName = "斗破苍穹";
 
     @Test
