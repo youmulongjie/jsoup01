@@ -10,12 +10,7 @@ springboot 版本：2.0.5.RELEASE<br>
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class Jsoup01ApplicationTests {
-    private String BASE_URL = "https://www.boquge.com/search.htm?keyword=";
     private String bookName = "斗破苍穹";
-
-    @Test
-    public void contextLoads() {
-    }
 
     @Test
     public void download() {
