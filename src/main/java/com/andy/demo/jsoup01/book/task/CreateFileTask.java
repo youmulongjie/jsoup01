@@ -42,13 +42,13 @@ public class CreateFileTask implements Runnable {
         log.info("当前线程：{}，下载章数：【{}~{}】，共{}章",
                 Thread.currentThread().getName(),
                 books.get(0).getIndex(),
-                books.get(books.size()-1).getIndex(),
+                books.get(books.size() - 1).getIndex(),
                 books.size());
 
         books.forEach((Chapter chapter) -> {
             try {
                 iNet.getContext(chapter);
-                write(chapter.getIndex(), chapter.getContext());
+                write(chapter);
             } catch (IOException e) {
             }
         });
@@ -58,26 +58,27 @@ public class CreateFileTask implements Runnable {
 
     /**
      * 写文件
-     * @param index 以index为名的文件名称
-     * @param context 文件内容
+     *
+     * @param chapter 小说章节
      * @throws IOException
      */
-    private final void write(Integer index, String context) throws IOException {
+    private final void write(Chapter chapter) throws IOException {
         File directory = new File(INet.DOWNLOAD_ADDRESS + iNet.bookName());
         // 强制创建文件夹
         FileUtils.forceMkdir(directory);
-        File file = new File(directory, index(index) + ".txt");
+        File file = new File(directory, index(chapter.getIndex()) + "-" + chapter.getTitle() + ".txt");
         // 强制创建文件
         FileUtils.touch(file);
-        FileUtils.writeStringToFile(file, context, "UTF-8");
+        FileUtils.writeStringToFile(file, chapter.getContext(), "UTF-8");
     }
 
     /**
-     *  以index作为小文件名称，便于合并大文件时排序
+     * 以index作为小文件名称，便于合并大文件时排序
+     *
      * @param index
      * @return
      */
-    private  final String index(Integer index){
+    private final String index(Integer index) {
         DecimalFormat df = new DecimalFormat("0000");
         return df.format(index);
     }

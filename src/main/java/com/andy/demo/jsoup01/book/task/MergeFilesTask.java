@@ -15,7 +15,7 @@ import java.util.concurrent.CountDownLatch;
  * 合并文件 任务线程
  */
 @Slf4j
-public class MergeFilesTask implements Runnable{
+public class MergeFilesTask implements Runnable {
     private static final int BUFFER_SIZE = 1024 * 100;
 
     private INet iNet;
@@ -39,7 +39,7 @@ public class MergeFilesTask implements Runnable{
      */
     @Override
     public void run() {
-        log.info("启用 合并文件 任务线程.");
+        log.info("启用 合并文件 任务线程（等待所有下载任务结束）.");
         try {
             // 等待 所有下载任务线程 完毕
             this.downLatch.await();
@@ -56,8 +56,9 @@ public class MergeFilesTask implements Runnable{
 
     /**
      * 合并文件
+     *
      * @param outFile 合并后输出的文件名
-     * @param files 将合并的文件集合
+     * @param files   将合并的文件集合
      */
     private void mergeFiles(String outFile, File[] files) {
         FileChannel outChannel = null;
@@ -91,5 +92,7 @@ public class MergeFilesTask implements Runnable{
             } catch (IOException ignore) {
             }
         }
+
+        log.info("合并完成");
     }
 }

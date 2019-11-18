@@ -3,7 +3,7 @@ package com.andy.demo.jsoup01.book.chapter;
 import lombok.Data;
 
 /**
- * 章节Bean
+ * 章节 Bean
  */
 @Data
 public class Chapter {

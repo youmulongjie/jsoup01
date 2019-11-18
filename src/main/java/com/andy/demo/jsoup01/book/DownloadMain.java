@@ -1,6 +1,7 @@
 package com.andy.demo.jsoup01.book;
 
 import com.andy.demo.jsoup01.book.chapter.Chapter;
+import com.andy.demo.jsoup01.book.exception.BookNotFoundException;
 import com.andy.demo.jsoup01.book.task.CreateFileTask;
 import com.andy.demo.jsoup01.book.task.MergeFilesTask;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +28,7 @@ public class DownloadMain {
      */
     public final void download() {
         try {
-            List<Chapter> books = iNet.getBooks();
+            List<Chapter> books = iNet.chapterList();
             if (null == books || books.size() == 0) {
                 log.info("【{}】共更新【{}】章", iNet.bookName(), 0);
                 return;
@@ -67,7 +68,9 @@ public class DownloadMain {
             // 最多等待60秒
             executorService.awaitTermination(60 * 1000, TimeUnit.SECONDS);
 
-        } catch (Exception e){
+        } catch (BookNotFoundException e) {
+            log.error(e.getMessage());
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
