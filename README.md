@@ -1,6 +1,6 @@
 Jsoup demo
 ================================
-springboot 版本：2.0.5.RELEASE<br>
+Springboot 版本：2.0.5.RELEASE<br>
 <br>
 以 笔趣阁（ https://www.boquge.com/ ）为例，下载小说。测试中以“斗破苍穹”为例，30秒内下载完整部小说，并合并成一个 txt 文件，方便直接加入到你的 小说阅读器中。
 
